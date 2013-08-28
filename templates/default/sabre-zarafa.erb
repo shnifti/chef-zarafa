@@ -1,0 +1,27 @@
+Alias /sabre-zarafa /usr/share/sabre-zarafa
+
+<Directory /usr/share/sabre-zarafa>
+    DirectoryIndex server.php
+    RewriteEngine On
+    RewriteBase /sabre-zarafa
+
+    # If the request does not reference an actual plain file or directory
+    # (such as server.php), interpret it as a "virtual path" and pass it to
+    # server.php:
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^.*$ /sabre-zarafa/server.php
+
+    # If you're getting 412 Precondition Failed errors, try stripping the ETag headers:
+    # RequestHeader unset If-None-Match
+    # Header unset ETag
+    # FileETag None
+</Directory>
+
+# Files and directories writable by the server should never be public:
+<Directory /usr/share/sabre-zarafa/data>
+    Deny from all
+</Directory>
+<Files /usr/share/sabre-zarafa/debug.txt>
+    Deny from all
+</Files>

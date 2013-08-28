@@ -91,6 +91,7 @@ if node[:zarafa][:backend_type] == 'ldap'
   end
 
 end
+
 =begin
 if node[:zarafa][:backend_type] == 'mysql'
   execute "postmap -q #{node['zarafa']['catchall']} mysql-aliases.cf" do
@@ -103,8 +104,14 @@ if node[:zarafa][:backend_type] == 'mysql'
     notifies :run, resources(:execute => "postmap -q #{node['zarafa']['catchall']} mysql-aliases.cf")
     notifies :restart, resources(:service => "postfix")
   end
+end
+=end
+  template "/etc/postfix/mysql-aliases.cf" do
+    notifies :restart, resources(:service => "postfix")
+  end
 
-  #catchall mysql mapping
+=begin
+  #catchall mysql mapping, see https://workaround.org/ispmail/lenny/postfix-database-mappings
 
   execute "postmap -q #{node['zarafa']['catchall']} email2email.cf" do
     action :nothing
