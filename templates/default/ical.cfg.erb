@@ -17,17 +17,21 @@ running_path = /
 server_bind = 0.0.0.0
 
 # wether normal connections can be made to the ical server
+# wether ssl connections can be made to the ical server
+
+<%if node[:zarafa][:ssl]%>
 ical_enable = no
+icals_enable = yes
+<%else%>
+ical_enable = yes
+icals_enable = no
+<%end%>
 
 # port which the ical server listens on for normal connections
 ical_port = 8080
 
-# wether ssl connections can be made to the ical server
-icals_enable = yes
-
 # port which the ical server listens on for ssl connections
 icals_port = 8443
-
 # default connection to the Zarafa server
 # Please refer to the administrator manual or manpage why HTTP is used rather than the UNIX socket.
 server_socket = http://localhost:236/zarafa
